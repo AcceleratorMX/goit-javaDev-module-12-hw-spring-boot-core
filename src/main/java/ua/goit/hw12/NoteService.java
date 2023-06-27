@@ -2,6 +2,7 @@ package ua.goit.hw12;
 
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.*;
 
 @Service
@@ -17,7 +18,8 @@ public class NoteService {
     }
 
     public Note add(Note note) {
-        long id = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
+        long id = generateRandomId();
+        note.setId(id);
         notes.put(id, note);
         return note;
     }
@@ -42,5 +44,13 @@ public class NoteService {
             throw new IllegalArgumentException("Note " + id + " not found.");
         }
         return notes.get(id);
+    }
+
+    private long generateRandomId() {
+        Random random = new SecureRandom();
+        return random.longs(500)
+                .filter(id -> !notes.containsKey(id))
+                .findFirst()
+                .orElseThrow(IllegalStateException::new);
     }
 }
