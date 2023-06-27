@@ -48,7 +48,7 @@ public class NoteService {
 
     private long generateRandomId() {
         Random random = new SecureRandom();
-        return random.longs(500)
+        return random.longs()
                 .filter(id -> !notes.containsKey(id))
                 .findFirst()
                 .orElseThrow(IllegalStateException::new);
